@@ -8,17 +8,16 @@ public class Character1 : MonoBehaviour
 
     // Character states variables:
     public bool isGrounded = false;
-    public bool isMoving = false;
     public bool isFalling = false;
     public bool isDouble = false;
     public bool didDouble = false;
 
     // Character movement variables:
     public float speed = 5f;
-    public float jumpForce = 7f;
+    public float jumpForce = 9f;
     public float jumpForceD = 0f;
     public float jumpForceDMultiplicator = 1f;
-    public float superJumpLimit = 15f;
+    public float superJumpLimit = 16f;
     public float dragLimit = 5f;
     public float movX;
 
@@ -58,7 +57,6 @@ public class Character1 : MonoBehaviour
         movX = Input.GetAxisRaw("Horizontal");
 
         // Setting all character states
-        isMoving = (movX != 0f);
         isGrounded = Physics2D.CircleCast(transform.position, radius, Vector3.down, groundRayDist, groundLayer);
         isFalling = (rb.velocity.y < 0 && !isGrounded);
         isDouble = (rb.drag != 0);

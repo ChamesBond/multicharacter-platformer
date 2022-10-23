@@ -8,18 +8,16 @@ public class Character2 : MonoBehaviour
 
     // Character states variables:
     public bool isGrounded = false;
-    public bool isMoving = false;
-    public bool isFalling = false;
     public bool isCharging = false;
     //public bool didImmune = false;
 
     // Character movement variables:
     public float speed = 5f;
-    public float jumpForce = 7f;
+    public float jumpForce = 9f;
     public float explodeForce = 3f;
     public float explodeLimit = 10f;
     public float explodeReleaseLimit = 8f;
-    public float chargingTime = 3f;
+    public float chargingTimeInS = 3f;
     public float movX;
 
     // Variables important to checking contact with the ground:
@@ -31,7 +29,6 @@ public class Character2 : MonoBehaviour
     private Rigidbody2D rb;
     //private Animator anim;
     //private SpriteRenderer sr;
-    private float jumpForceB;
     private float explodeForceB;
 
     void Awake() {
@@ -46,7 +43,6 @@ public class Character2 : MonoBehaviour
 
         //Setting up backup values:
         explodeForceB = explodeForce;
-        jumpForceB = jumpForce;
 
         //anim = GetComponent<Animator>();
         //sr = GetComponent<SpriteRenderer>();
@@ -59,30 +55,29 @@ public class Character2 : MonoBehaviour
         movX = Input.GetAxisRaw("Horizontal");
 
         // Setting all character states
-        isMoving = (movX != 0f);
         isGrounded = Physics2D.CircleCast(transform.position, radius, Vector3.down, groundRayDist, groundLayer);
-        isFalling = (rb.velocity.y < 0 && !isGrounded);
 
         if(Input.GetKeyDown(KeyCode.UpArrow)) {
             Jump();
         }
 
         if(Input.GetKey(KeyCode.DownArrow)) {
-            if(explodeForce <= explodeLimit && isGrounded) { explodeForce += Time.deltaTime * ((explodeLimit - explodeForceB) / chargingTime); isCharging = true;}
+            // Charging the explosion
+            if(explodeForce <= explodeLimit && isGrounded) { explodeForce += Time.deltaTime * ((explodeLimit - explodeForceB) / chargingTimeInS); isCharging = true; }
+            // Explosion when reaching a limit
             else if(explodeForce > explodeLimit) Explode();
         }
 
         if(Input.GetKeyDown(KeyCode.DownArrow)) {
+            // Giving immunity
             obj.tag = "ImmunePlayer";
         }
 
         if(Input.GetKeyUp(KeyCode.DownArrow)) {
+            // Explosion when releasing the down arrow (only when reached certain release limit)
             if(explodeForce >= explodeReleaseLimit) Explode();
-            else if(isGrounded) Shove();
-            obj.tag = "Player";
-            explodeForce = explodeForceB;
-            isCharging = false;
-
+            // Shove to register the collider (so you cannot stay indefinitely on the spikes)
+            else Shove();
         }
 
         /*
@@ -131,11 +126,7 @@ public class Character2 : MonoBehaviour
         rb.velocity = Vector2.up * jumpForce;
     }
 
-    public void Shove()
-    {
-        rb.velocity = Vector2.up;
-    }
-
+    // Function to immunity explode
     public void Explode()
     {
         //if(!isGrounded) return;
@@ -146,6 +137,8 @@ public class Character2 : MonoBehaviour
         // Showing the animation
         ExplosionManager.obj.showExplosion(transform.position);
 
+
+        // Resetting immunity and variables
         obj.tag = "Player";
         explodeForce = explodeForceB;
         isCharging = false;
@@ -158,6 +151,20 @@ public class Character2 : MonoBehaviour
         didImmune = true;
         isCharging = false;
         */
+    }
+
+    // Function important in registering the collider, moves up a few pixels
+    public void Shove()
+    {
+        if(!isGrounded) return;
+
+        // Delicate shove
+        rb.velocity = Vector2.up;
+
+        // Resetting immunity and variables
+        obj.tag = "Player";
+        explodeForce = explodeForceB;
+        isCharging = false;
     }
 
     void OnDestroy() {

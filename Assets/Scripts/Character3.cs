@@ -12,7 +12,10 @@ public class Character3 : MonoBehaviour
 
     // Character movement variables:
     public float speed = 5f;
-    public float jumpForce = 3f;
+    public float jumpForce = 9f;
+    public float speedLimit = 15f;
+    public float jumpForceLimit = 11f;
+    public float boostChargeTime = 3f;
     public float movX;
 
     // Variables important to checking contact with the ground:
@@ -24,6 +27,8 @@ public class Character3 : MonoBehaviour
     private Rigidbody2D rb;
     //private Animator anim;
     //private SpriteRenderer sr;
+    private float speedB;
+    private float jumpForceB;
 
     void Awake() {
         obj = this;
@@ -33,6 +38,10 @@ public class Character3 : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        //Setting up backup values:
+        jumpForceB = jumpForce;
+        speedB = speed;
 
         //anim = GetComponent<Animator>();
         //sr = GetComponent<SpriteRenderer>();
@@ -44,14 +53,31 @@ public class Character3 : MonoBehaviour
         // Player movement:
         movX = Input.GetAxisRaw("Horizontal");
 
-        // Checking if the character is moving:
-        isMoving = (movX != 0f);
-
-        // Checking if the character is grounded:
+        // Setting all character states
+        isMoving = (rb.velocity.x != 0f);
         isGrounded = Physics2D.CircleCast(transform.position, radius, Vector3.down, groundRayDist, groundLayer);
 
         if(Input.GetKeyDown(KeyCode.UpArrow)) {
             Jump();
+
+            // Reseting jumpforce to the primary value:
+            jumpForce = jumpForceB;
+        }
+
+        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) {
+            
+            if(isMoving && isGrounded && speed <= speedLimit) {
+                // Charging the boost
+                speed += Time.deltaTime * ((speedLimit - speedB) / boostChargeTime); 
+                // Charging the jump (after half of the boost)
+                if((speed - speedB) >= ((speedLimit - speedB) / 2) && jumpForce <= jumpForceLimit) { jumpForce += Time.deltaTime * ((jumpForceLimit - jumpForceB) / (boostChargeTime / 2)); }
+            }
+        }
+
+        if(Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow)) {
+            // Resetting jumpforce and speed on release
+            speed = speedB;
+            jumpForce = jumpForceB;
         }
     }
 
@@ -67,7 +93,6 @@ public class Character3 : MonoBehaviour
 
         rb.velocity = Vector2.up * jumpForce;
     }
-
 
     void OnDestroy() {
         obj = null;
