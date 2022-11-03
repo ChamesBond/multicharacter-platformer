@@ -331,7 +331,6 @@ GameObject:
   - component: {fileID: 788829052}
   - component: {fileID: 788829051}
   - component: {fileID: 788829050}
-  - component: {fileID: 788829055}
   m_Layer: 0
   m_Name: character2
   m_TagString: Player
@@ -479,30 +478,6 @@ Transform:
   m_Father: {fileID: 1740889703}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &788829055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 788829049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81e4985d73b17af4e857b014a903f1e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isGrounded: 0
-  isMoving: 0
-  speed: 5
-  jumpForce: 3
-  speedLimit: 10
-  boostChargeTime: 2
-  movX: 0
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  radius: 0.3
-  groundRayDist: 0.5
 --- !u!1 &809347486
 GameObject:
   m_ObjectHideFlags: 0
@@ -860,6 +835,7 @@ MonoBehaviour:
   speed: 5
   jumpForce: 9
   speedLimit: 15
+  jumpForceLimit: 11
   boostChargeTime: 3
   movX: 0
   groundLayer:
