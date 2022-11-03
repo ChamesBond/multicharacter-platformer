@@ -27,8 +27,7 @@ public class Character2 : MonoBehaviour
 
     // Private variables:
     private Rigidbody2D rb;
-    //private Animator anim;
-    //private SpriteRenderer sr;
+    private SpriteRenderer sr;
     private float explodeForceB;
 
     void Awake() {
@@ -38,14 +37,15 @@ public class Character2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Getting referenced components
         rb = GetComponent<Rigidbody2D>();
-        //sr = GetComponent<SpriteRenderer>();
+        sr = GetComponent<SpriteRenderer>();
 
         //Setting up backup values:
         explodeForceB = explodeForce;
 
-        //anim = GetComponent<Animator>();
-        //sr = GetComponent<SpriteRenderer>();
+        // Basic color
+        sr.material.color = Color.blue;
     }
 
     // Update is called once per frame
@@ -59,58 +59,32 @@ public class Character2 : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.UpArrow)) {
             Jump();
-        }
 
-        if(Input.GetKey(KeyCode.DownArrow)) {
-            // Charging the explosion
-            if(explodeForce <= explodeLimit && isGrounded) { explodeForce += Time.deltaTime * ((explodeLimit - explodeForceB) / chargingTimeInS); isCharging = true; }
-            // Explosion when reaching a limit
-            else if(explodeForce > explodeLimit) Explode();
+            if(explodeForce >= explodeReleaseLimit) Explode();
         }
 
         if(Input.GetKeyDown(KeyCode.DownArrow)) {
             // Giving immunity
             obj.tag = "ImmunePlayer";
+
+            // Changing color to indicate immunity
+            sr.material.color = Color.grey;
+
+            // Starting the charging
+            isCharging = true;
         }
 
-        if(Input.GetKeyUp(KeyCode.DownArrow)) {
-            // Explosion when releasing the down arrow (only when reached certain release limit)
-            if(explodeForce >= explodeReleaseLimit) Explode();
-            // Shove to register the collider (so you cannot stay indefinitely on the spikes)
-            else Shove();
+        // States in which the explosion force charges
+        if(isCharging && isGrounded) {
+            // Increasing force of the explosion
+            explodeForce += Time.deltaTime * ((explodeLimit - explodeForceB) / chargingTimeInS);
+
+            // Reaching the limit causes the explosion
+            if(explodeForce >= explodeLimit) Explode();
         }
 
-        /*
-        // Immunity for a certain duration
-        if(Input.GetKey(KeyCode.DownArrow)) {
-            if(!didImmune) {
-            obj.tag = "ImmunePlayer";
-
-            // Charging the explosion
-            if(explodeForce <= explodeLimit && isGrounded) { explodeForce += Time.deltaTime * ((explodeLimit - explodeForceB) / 3); isCharging = true;}
-            // Explosion when reaching a limit
-            else Explode();
-            }
-        }
-
-        // Resetting immunity
-        if(Input.GetKeyDown(KeyCode.DownArrow)) {
-            didImmune = false;
-        }
-
-        // Explosion when releasing
-        if(Input.GetKeyUp(KeyCode.DownArrow)) {
-            // Resetting immunity
-            if(didImmune) didImmune = false;
-            // Explosion when releasing the down arrow
-            else Explode();
-
-            // Backup resetting (important when releasing in the air)
-            obj.tag = "Player";
-            explodeForce = explodeForceB;
-            isCharging = false;
-        }
-        */
+        // Color for available explosion
+        if(explodeForce >= explodeReleaseLimit) sr.material.color = Color.cyan;
     }
 
     // Update for all the physics calculations connected to the Unity engine:
@@ -119,52 +93,27 @@ public class Character2 : MonoBehaviour
     }
 
     // Simple function for jumping:
-    public void Jump() 
-    {
+    public void Jump() {
+        
         if(!isGrounded || isCharging) return;
 
         rb.velocity = Vector2.up * jumpForce;
     }
 
     // Function to immunity explode
-    public void Explode()
-    {
-        //if(!isGrounded) return;
-
+    public void Explode() {
+        
         // Explosion jump
         rb.velocity = Vector2.up * explodeForce;
 
         // Showing the animation
         ExplosionManager.obj.showExplosion(transform.position);
 
-
         // Resetting immunity and variables
         obj.tag = "Player";
         explodeForce = explodeForceB;
         isCharging = false;
-
-
-        /*
-        // Resetting immunity and variables
-        obj.tag = "Player";
-        explodeForce = explodeForceB;
-        didImmune = true;
-        isCharging = false;
-        */
-    }
-
-    // Function important in registering the collider, moves up a few pixels
-    public void Shove()
-    {
-        if(!isGrounded) return;
-
-        // Delicate shove
-        rb.velocity = Vector2.up;
-
-        // Resetting immunity and variables
-        obj.tag = "Player";
-        explodeForce = explodeForceB;
-        isCharging = false;
+        sr.material.color = Color.blue;
     }
 
     void OnDestroy() {

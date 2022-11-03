@@ -25,8 +25,7 @@ public class Character3 : MonoBehaviour
 
     // Private variables:
     private Rigidbody2D rb;
-    //private Animator anim;
-    //private SpriteRenderer sr;
+    private SpriteRenderer sr;
     private float speedB;
     private float jumpForceB;
 
@@ -37,14 +36,16 @@ public class Character3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Getting referenced components
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
 
         //Setting up backup values:
         jumpForceB = jumpForce;
         speedB = speed;
 
-        //anim = GetComponent<Animator>();
-        //sr = GetComponent<SpriteRenderer>();
+        // Basic color
+        sr.material.color = Color.red;
     }
 
     // Update is called once per frame
