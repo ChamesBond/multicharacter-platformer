@@ -11,14 +11,19 @@ public class Character1 : MonoBehaviour
     public bool isFalling = false;
     public bool isDouble = false;
     public bool didDouble = false;
+    public bool progressBar = false;
 
     // Character movement variables:
     public float speed = 5f;
+    public float minSpeed = 2f;
     public float jumpForce = 9f;
-    public float jumpForceD = 0f;
-    public float jumpForceDMultiplicator = 1f;
+    public float jumpForceD = 5f;
+    public float jumpForceB;
+    public float jumpForceDB;
     public float superJumpLimit = 16f;
+    public float doubleJumpLimit = 9f;
     public float dragLimit = 5f;
+    public float chargingTimeInS = 1f;
     public float movX;
 
     // Variables important to checking contact with the ground:
@@ -29,7 +34,6 @@ public class Character1 : MonoBehaviour
     // Private variables:
     private Rigidbody2D rb;
     private SpriteRenderer sr;    
-    private float jumpForceB;
     private float speedB;
 
 
@@ -47,6 +51,7 @@ public class Character1 : MonoBehaviour
         //Setting up backup values:
         jumpForceB = jumpForce;
         speedB = speed;
+        jumpForceDB = jumpForceD;
 
         // Basic color
         sr.material.color = Color.green;
@@ -62,30 +67,40 @@ public class Character1 : MonoBehaviour
         isGrounded = Physics2D.CircleCast(transform.position, radius, Vector3.down, groundRayDist, groundLayer);
         isFalling = (rb.velocity.y < 0 && !isGrounded);
         isDouble = (rb.drag != 0);
-        jumpForceD = rb.drag;
 
-        if(Input.GetKeyDown(KeyCode.UpArrow)) {
+        if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow)) {
+            // Turning off UI progress bar
+            if(progressBar) { ProgressBarManager.obj.hideProgressBar1(); progressBar = false; }
+
             Jump();
             if(isDouble) DoubleJump();
 
             // Reseting speed and jumpforce to the primary values:
             jumpForce = jumpForceB;
+            jumpForceD = jumpForceDB;
             speed = speedB;
         }
 
         // Super jump preparation:
         if(Input.GetKey(KeyCode.DownArrow)) {
             if(isGrounded) {
+                // Turning on UI progress bar
+                if(!progressBar) { ProgressBarManager.obj.showProgressBar1(); progressBar = true; }
+
                 // Gradually increasing jumpforce (gets to the limit in 1 second):
-                if(jumpForce <= superJumpLimit) jumpForce += Time.deltaTime * (superJumpLimit - jumpForceB);
+                if(jumpForce <= superJumpLimit) jumpForce += Time.deltaTime * ((superJumpLimit - jumpForceB) / chargingTimeInS);
 
                 // Gradually decreasing speed (gets to the limit in 1 second):
-                if(speed >= 2) speed -= Time.deltaTime * 3;
+                if(speed >= minSpeed) speed -= Time.deltaTime * ((speedB - minSpeed) / chargingTimeInS);
             }
 
             if(isFalling && !didDouble) {
-                // Gradually increasing drag (falling speed):
-                if(rb.drag <= dragLimit) rb.drag += Time.deltaTime * dragLimit;
+                if(!progressBar) { ProgressBarManager.obj.showProgressBar1(); progressBar = true; }
+                // Gradually increasing drag (decreasing falling speed):
+                if(rb.drag <= dragLimit) rb.drag += Time.deltaTime * (dragLimit / chargingTimeInS);
+
+                // Gradually increasing double jump force:
+                if(jumpForceD <= doubleJumpLimit) jumpForceD += Time.deltaTime * (doubleJumpLimit / chargingTimeInS);
             }
         }
 
@@ -93,6 +108,7 @@ public class Character1 : MonoBehaviour
         if(isGrounded) {
             rb.drag = 0;
             didDouble = false;
+            jumpForceD = jumpForceDB;
         }
     }
 
@@ -114,7 +130,7 @@ public class Character1 : MonoBehaviour
     {
         if(didDouble) return;
 
-        rb.velocity = Vector2.up * jumpForceD * jumpForceDMultiplicator;
+        rb.velocity = Vector2.up * jumpForceD;
         didDouble = true;
         rb.drag = 0;
     }

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 086a24fc20ff4ec4b9e7517c9110f474
+guid: 618b78c05a6571e4e99f798411dfe211
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -105,7 +105,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: progress_bar_0
+      name: progress_bar_char2_0
       rect:
         serializedVersion: 2
         x: 0
@@ -119,14 +119,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c98460d615c2e24389026cb151bf53c
-      internalID: 8252788
+      spriteID: 8dea523a2bedc3540ad22ed03d2d7d97
+      internalID: 243228201
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: progress_bar_1
+      name: progress_bar_char2_1
       rect:
         serializedVersion: 2
         x: 64
@@ -140,14 +140,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bf4608a95523b0743b24199b6c1305fc
-      internalID: -1106046757
+      spriteID: ca5dc0c1e695ae94b9109b7eef92844e
+      internalID: -211929085
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: progress_bar_2
+      name: progress_bar_char2_2
       rect:
         serializedVersion: 2
         x: 0
@@ -161,14 +161,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4abe5c2d0a840b943aba2cddba284833
-      internalID: -1609800144
+      spriteID: 68452aea0231c2f469b76593574748db
+      internalID: 410795253
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: progress_bar_3
+      name: progress_bar_char2_3
       rect:
         serializedVersion: 2
         x: 64
@@ -182,8 +182,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c6e182fcecc14f04a9f04dc69d2b1065
-      internalID: 1443813257
+      spriteID: c52c99d1383c2ca4889fc712c9de2b1c
+      internalID: 1336882803
       vertices: []
       indices: 
       edges: []
@@ -199,10 +199,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      progress_bar_1: -1106046757
-      progress_bar_3: 1443813257
-      progress_bar_0: 8252788
-      progress_bar_2: -1609800144
+      progress_bar_char2_1: -211929085
+      progress_bar_char2_0: 243228201
+      progress_bar_char2_2: 410795253
+      progress_bar_char2_3: 1336882803
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
