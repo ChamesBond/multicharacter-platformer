@@ -1,3 +1,5 @@
+// Character one class (controls and ability mechanics)
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +15,7 @@ public class Character1 : MonoBehaviour
     public bool didDouble = false;
     public bool progressBar = false;
 
-    // Character movement variables:
+    // Character movement and ability variables:
     public float speed = 5f;
     public float minSpeed = 2f;
     public float jumpForce = 9f;
@@ -36,7 +38,7 @@ public class Character1 : MonoBehaviour
     private SpriteRenderer sr;    
     private float speedB;
 
-
+    // Initializing object
     void Awake() {
         obj = this;
     }
@@ -48,7 +50,7 @@ public class Character1 : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
 
-        //Setting up backup values:
+        // Setting up backup values
         jumpForceB = jumpForce;
         speedB = speed;
         jumpForceDB = jumpForceD;
@@ -60,10 +62,10 @@ public class Character1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Player movement left/right:
+        // Player movement left/right
         movX = Input.GetAxisRaw("Horizontal");
 
-        // Setting all character states
+        // Setting up character states
         isGrounded = Physics2D.CircleCast(transform.position, radius, Vector3.down, groundRayDist, groundLayer);
         isFalling = (rb.velocity.y < 0 && !isGrounded);
         isDouble = (rb.drag != 0);
@@ -75,49 +77,58 @@ public class Character1 : MonoBehaviour
             Jump();
             if(isDouble) DoubleJump();
 
-            // Reseting speed and jumpforce to the primary values:
+            // Reseting speed and jumpforce to the primary values
             jumpForce = jumpForceB;
             jumpForceD = jumpForceDB;
             speed = speedB;
         }
 
-        // Super jump preparation:
+        // Super jump and double jump charging
         if(Input.GetKey(KeyCode.DownArrow)) {
             if(isGrounded) {
                 // Turning on UI progress bar
                 if(!progressBar) { ProgressBarManager.obj.showProgressBar1(); progressBar = true; }
 
-                // Gradually increasing jumpforce (gets to the limit in 1 second):
+                // Gradually increasing jumpforce (gets to the limit in 1 second)
                 if(jumpForce <= superJumpLimit) jumpForce += Time.deltaTime * ((superJumpLimit - jumpForceB) / chargingTimeInS);
 
-                // Gradually decreasing speed (gets to the limit in 1 second):
+                // Gradually decreasing speed (gets to the limit in 1 second)
                 if(speed >= minSpeed) speed -= Time.deltaTime * ((speedB - minSpeed) / chargingTimeInS);
             }
 
             if(isFalling && !didDouble) {
+                // Turning on UI progress bar
                 if(!progressBar) { ProgressBarManager.obj.showProgressBar1(); progressBar = true; }
-                // Gradually increasing drag (decreasing falling speed):
+
+                // Gradually increasing drag (decreasing falling speed)
                 if(rb.drag <= dragLimit) rb.drag += Time.deltaTime * (dragLimit / chargingTimeInS);
 
-                // Gradually increasing double jump force:
+                // Gradually increasing double jump force
                 if(jumpForceD <= doubleJumpLimit) jumpForceD += Time.deltaTime * (doubleJumpLimit / chargingTimeInS);
             }
         }
 
-        // Resetting drag with ground contact:
+        // Resetting drag and double jump parameters with ground contact
         if(isGrounded) {
             rb.drag = 0;
             didDouble = false;
             jumpForceD = jumpForceDB;
         }
+
+        // Turning off progress bar when it's not loading anything
+        if(!isGrounded && !isFalling && progressBar) { 
+            ProgressBarManager.obj.hideProgressBar1(); 
+            progressBar = false; 
+        }
+
     }
 
-    // Update for all the physics calculations connected to the Unity engine:
+    // Update for all the physics calculations connected to the Unity engine
     void FixedUpdate() {
         rb.velocity = new Vector2(movX * speed, rb.velocity.y);
     }
 
-    // Simple function for jumping:
+    // Simple function for jumping
     public void Jump() 
     {
         if(!isGrounded) return;
@@ -125,7 +136,7 @@ public class Character1 : MonoBehaviour
         rb.velocity = Vector2.up * jumpForce;
     }
 
-    // Function for double jumping:
+    // Function for double jumping
     public void DoubleJump()
     {
         if(didDouble) return;
@@ -135,6 +146,7 @@ public class Character1 : MonoBehaviour
         rb.drag = 0;
     }
 
+    // Ending the scene
     void OnDestroy() {
         obj = null;
     }

@@ -1,3 +1,5 @@
+// Character three class (controls and ability mechanics)
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +11,13 @@ public class Character3 : MonoBehaviour
     // Character states variables:
     public bool isGrounded = false;
     public bool isMoving = false;
+    public bool progressBar = false;
 
     // Character movement variables:
     public float speed = 5f;
-    public float jumpForce = 9f;
+    public float speedB;
     public float speedLimit = 15f;
+    public float jumpForce = 9f;
     public float jumpForceLimit = 11f;
     public float boostChargeTime = 3f;
     public float movX;
@@ -26,10 +30,11 @@ public class Character3 : MonoBehaviour
     // Private variables:
     private Rigidbody2D rb;
     private SpriteRenderer sr;
-    private float speedB;
     private float jumpForceB;
 
-    void Awake() {
+    // Initializing object
+    void Awake() 
+    {
         obj = this;
     }
 
@@ -40,54 +45,59 @@ public class Character3 : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
 
-        //Setting up backup values:
+        //Setting up backup values
         jumpForceB = jumpForce;
         speedB = speed;
 
         // Basic color
-        sr.material.color = Color.red;
+        sr.material.color = Color.cyan;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Player movement:
+        // Player movement
         movX = Input.GetAxisRaw("Horizontal");
 
-        // Setting all character states
+        // Setting up character states
         isMoving = (rb.velocity.x != 0f);
         isGrounded = Physics2D.CircleCast(transform.position, radius, Vector3.down, groundRayDist, groundLayer);
 
         if(Input.GetKeyDown(KeyCode.UpArrow)) {
             Jump();
-
-            // Reseting jumpforce to the primary value:
-            jumpForce = jumpForceB;
         }
 
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) {
             
             if(isMoving && isGrounded && speed <= speedLimit) {
+                // Turning on UI progress bar
+                if(!progressBar) { ProgressBarManager.obj.showProgressBar3(); progressBar = true; }
+
                 // Charging the boost
-                speed += Time.deltaTime * ((speedLimit - speedB) / boostChargeTime); 
+                speed += Time.deltaTime * ((speedLimit - speedB) / boostChargeTime);
+
                 // Charging the jump (after half of the boost)
                 if((speed - speedB) >= ((speedLimit - speedB) / 2) && jumpForce <= jumpForceLimit) { jumpForce += Time.deltaTime * ((jumpForceLimit - jumpForceB) / (boostChargeTime / 2)); }
             }
         }
 
         if(Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow)) {
+            // Turning off UI progress bar
+            if(progressBar) { ProgressBarManager.obj.hideProgressBar3(); progressBar = false; };
+
             // Resetting jumpforce and speed on release
             speed = speedB;
             jumpForce = jumpForceB;
         }
     }
 
-    // Update for all the physics calculations connected to the Unity engine:
-    void FixedUpdate() {
+    // Update for all the physics calculations connected to the Unity engine
+    void FixedUpdate() 
+    {
         rb.velocity = new Vector2(movX * speed, rb.velocity.y);
     }
 
-    // Simple function for jumping:
+    // Simple function for jumping
     public void Jump() 
     {
         if(!isGrounded) return;
@@ -95,7 +105,9 @@ public class Character3 : MonoBehaviour
         rb.velocity = Vector2.up * jumpForce;
     }
 
-    void OnDestroy() {
+    // Ending the scene
+    void OnDestroy() 
+    {
         obj = null;
     }
 }

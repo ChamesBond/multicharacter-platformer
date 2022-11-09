@@ -109,7 +109,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 16
+        y: 0
         width: 64
         height: 16
       alignment: 0
@@ -130,7 +130,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 64
-        y: 16
+        y: 0
         width: 64
         height: 16
       alignment: 0
@@ -150,7 +150,7 @@ TextureImporter:
       name: progress_bar_char3_2
       rect:
         serializedVersion: 2
-        x: 0
+        x: 128
         y: 0
         width: 64
         height: 16
@@ -171,7 +171,7 @@ TextureImporter:
       name: progress_bar_char3_3
       rect:
         serializedVersion: 2
-        x: 64
+        x: 192
         y: 0
         width: 64
         height: 16
@@ -188,6 +188,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: progress_bar_char3_4
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 64
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be8dd2665ccecb0459bf93c8484c82b9
+      internalID: 1759550927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -200,6 +221,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       progress_bar_char3_0: -2061832477
+      progress_bar_char3_4: 1759550927
       progress_bar_char3_1: 897753223
       progress_bar_char3_2: 1900178189
       progress_bar_char3_3: 1184211438

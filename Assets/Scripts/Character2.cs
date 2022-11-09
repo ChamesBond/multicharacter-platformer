@@ -1,3 +1,5 @@
+// Character two class (controls and ability mechanics)
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +11,14 @@ public class Character2 : MonoBehaviour
     // Character states variables:
     public bool isGrounded = false;
     public bool isCharging = false;
-    //public bool didImmune = false;
+    public bool progressBar = false;
 
     // Character movement variables:
     public float speed = 5f;
     public float jumpForce = 9f;
     public float explodeForce = 3f;
+    public float explodeForceB;
     public float explodeLimit = 10f;
-    public float explodeReleaseLimit = 8f;
     public float chargingTimeInS = 3f;
     public float movX;
 
@@ -28,8 +30,8 @@ public class Character2 : MonoBehaviour
     // Private variables:
     private Rigidbody2D rb;
     private SpriteRenderer sr;
-    private float explodeForceB;
 
+    // Initializing object
     void Awake() {
         obj = this;
     }
@@ -41,26 +43,29 @@ public class Character2 : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
 
-        //Setting up backup values:
+        //Setting up backup values
         explodeForceB = explodeForce;
 
         // Basic color
-        sr.material.color = Color.blue;
+        sr.material.color = Color.red;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Player movement:
+        // Player movement
         movX = Input.GetAxisRaw("Horizontal");
 
-        // Setting all character states
+        // Setting up character states
         isGrounded = Physics2D.CircleCast(transform.position, radius, Vector3.down, groundRayDist, groundLayer);
 
-        if(Input.GetKeyDown(KeyCode.UpArrow)) {
+        if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow)) {
             Jump();
 
-            if(explodeForce >= explodeReleaseLimit) Explode();
+            // Exploding above the halfway point threshhold
+            if((explodeForce - explodeForceB) >= ((explodeLimit - explodeForceB) / 2)) Explode();
+            // Turning off UI progress bar
+            else if(progressBar) { ProgressBarManager.obj.hideProgressBar2(); progressBar = false; };
         }
 
         if(Input.GetKeyDown(KeyCode.DownArrow)) {
@@ -76,6 +81,9 @@ public class Character2 : MonoBehaviour
 
         // States in which the explosion force charges
         if(isCharging && isGrounded) {
+            // Turning on UI progress bar
+            if(!progressBar) { ProgressBarManager.obj.showProgressBar2(); progressBar = true; }
+
             // Increasing force of the explosion
             explodeForce += Time.deltaTime * ((explodeLimit - explodeForceB) / chargingTimeInS);
 
@@ -83,18 +91,19 @@ public class Character2 : MonoBehaviour
             if(explodeForce >= explodeLimit) Explode();
         }
 
-        // Color for available explosion
-        if(explodeForce >= explodeReleaseLimit) sr.material.color = Color.cyan;
+        // Color for available explosion (halfway point threshhold)
+        if((explodeForce - explodeForceB) >= ((explodeLimit - explodeForceB) / 2)) sr.material.color = Color.yellow;
     }
 
-    // Update for all the physics calculations connected to the Unity engine:
+    // Update for all the physics calculations connected to the Unity engine
     void FixedUpdate() {
         rb.velocity = new Vector2(movX * speed, rb.velocity.y);
     }
 
-    // Simple function for jumping:
+    // Simple function for jumping
     public void Jump() {
         
+        // Cannot jump if the ability is charging
         if(!isGrounded || isCharging) return;
 
         rb.velocity = Vector2.up * jumpForce;
@@ -102,6 +111,9 @@ public class Character2 : MonoBehaviour
 
     // Function to immunity explode
     public void Explode() {
+
+        // Turning off UI progress bar
+        if(progressBar) { ProgressBarManager.obj.hideProgressBar2(); progressBar = false; };
         
         // Explosion jump
         rb.velocity = Vector2.up * explodeForce;
@@ -113,9 +125,10 @@ public class Character2 : MonoBehaviour
         obj.tag = "Player";
         explodeForce = explodeForceB;
         isCharging = false;
-        sr.material.color = Color.blue;
+        sr.material.color = Color.red;
     }
 
+    // Ending the scene
     void OnDestroy() {
         obj = null;
     }
