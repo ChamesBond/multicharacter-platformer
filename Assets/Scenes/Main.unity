@@ -437,7 +437,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &613047795
 Transform:
   m_ObjectHideFlags: 0
@@ -517,6 +517,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5138410182c584fb5c013bff25ac0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  s0: {fileID: 243228201, guid: 618b78c05a6571e4e99f798411dfe211, type: 3}
+  s1: {fileID: -211929085, guid: 618b78c05a6571e4e99f798411dfe211, type: 3}
+  s2: {fileID: 410795253, guid: 618b78c05a6571e4e99f798411dfe211, type: 3}
+  s3: {fileID: 1336882803, guid: 618b78c05a6571e4e99f798411dfe211, type: 3}
 --- !u!1 &788829049
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,11 +555,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGrounded: 0
   isCharging: 0
+  progressBar: 0
   speed: 5
   jumpForce: 9
   explodeForce: 3
+  explodeForceB: 0
   explodeLimit: 10
-  explodeReleaseLimit: 7
   chargingTimeInS: 3
   movX: 0
   groundLayer:
@@ -697,7 +702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &809347487
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -907,7 +912,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1486600797
 Transform:
   m_ObjectHideFlags: 0
@@ -987,6 +992,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d80728e1b586864686d70eab4470ede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  s0: {fileID: -2061832477, guid: 99637626d14b6824ab6eb3e559b90b0c, type: 3}
+  s1: {fileID: 897753223, guid: 99637626d14b6824ab6eb3e559b90b0c, type: 3}
+  s2: {fileID: 1900178189, guid: 99637626d14b6824ab6eb3e559b90b0c, type: 3}
+  s3: {fileID: 1184211438, guid: 99637626d14b6824ab6eb3e559b90b0c, type: 3}
+  s4: {fileID: 1759550927, guid: 99637626d14b6824ab6eb3e559b90b0c, type: 3}
 --- !u!1 &1564140611
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,7 +1016,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1564140612
 Transform:
   m_ObjectHideFlags: 0
@@ -1136,9 +1146,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGrounded: 0
   isMoving: 0
+  progressBar: 0
   speed: 5
-  jumpForce: 9
+  speedB: 0
   speedLimit: 15
+  jumpForce: 9
   jumpForceLimit: 11
   boostChargeTime: 3
   movX: 0
