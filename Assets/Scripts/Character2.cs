@@ -12,6 +12,7 @@ public class Character2 : MonoBehaviour
     public bool isGrounded = false;
     public bool isCharging = false;
     public bool progressBar = false;
+    public bool cameraShift = false;
 
     // Character movement variables:
     public float speed = 5f;
@@ -93,6 +94,15 @@ public class Character2 : MonoBehaviour
 
         // Color for available explosion (halfway point threshhold)
         if((explodeForce - explodeForceB) >= ((explodeLimit - explodeForceB) / 2)) sr.material.color = Color.yellow;
+
+        // Modifying the camera position
+        if(!cameraShift && obj.transform.position.y <= -10) {
+            Game.obj.camShiftDown();
+            cameraShift = true;
+        } else if(cameraShift && obj.transform.position.y > -10) {
+            Game.obj.camShiftUp();
+            cameraShift = false;
+        }
     }
 
     // Update for all the physics calculations connected to the Unity engine

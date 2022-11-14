@@ -14,6 +14,7 @@ public class Character1 : MonoBehaviour
     public bool isDouble = false;
     public bool didDouble = false;
     public bool progressBar = false;
+    public bool cameraShift = false;
 
     // Character movement and ability variables:
     public float speed = 5f;
@@ -121,6 +122,14 @@ public class Character1 : MonoBehaviour
             progressBar = false; 
         }
 
+        // Modifying the camera position
+        if(!cameraShift && obj.transform.position.y >= 10) {
+            Game.obj.camShiftUp();
+            cameraShift = true;
+        } else if(cameraShift && obj.transform.position.y < 10) {
+            Game.obj.camShiftDown();
+            cameraShift = false;
+        }
     }
 
     // Update for all the physics calculations connected to the Unity engine

@@ -26,11 +26,7 @@ public class ProgressBar1: MonoBehaviour
     void Awake() 
     {
         obj = this;
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
         // Getting referenced components
         sr = GetComponent<SpriteRenderer>();
 

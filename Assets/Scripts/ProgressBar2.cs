@@ -23,18 +23,13 @@ public class ProgressBar2 : MonoBehaviour
     void Awake() 
     {
         obj = this;
-    }
 
-    // Start is called before the first frame update
-    void Start() 
-    {
         // Getting referenced components
         sr = GetComponent<SpriteRenderer>();
 
         // Setting up limit value
         explodeLimit = Character2.obj.explodeLimit - Character2.obj.explodeForceB;
     }
-
 
     // Update is called once per frame
     public void Update() 
