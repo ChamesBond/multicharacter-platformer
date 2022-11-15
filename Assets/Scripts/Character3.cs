@@ -12,6 +12,7 @@ public class Character3 : MonoBehaviour
     public bool isGrounded = false;
     public bool isMoving = false;
     public bool progressBar = false;
+    public bool cameraShift = false;
 
     // Character movement variables:
     public float speed = 5f;
@@ -88,6 +89,15 @@ public class Character3 : MonoBehaviour
             // Resetting jumpforce and speed on release
             speed = speedB;
             jumpForce = jumpForceB;
+        }
+
+        // Modifying the camera position
+        if(!cameraShift && obj.transform.position.x >= 21.5f) {
+            Game.obj.camShiftRight();
+            cameraShift = true;
+        } else if(cameraShift && obj.transform.position.x < 21.5f) {
+            Game.obj.camShiftLeft();
+            cameraShift = false;
         }
     }
 

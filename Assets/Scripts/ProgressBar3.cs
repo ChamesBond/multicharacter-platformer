@@ -43,7 +43,6 @@ public class ProgressBar3 : MonoBehaviour
         if(speed >= speedLimit / 2 && speed < (3 * speedLimit) / 4) sr.sprite = s2;
         if(speed >= (3 * speedLimit) / 4 && speed < speedLimit) sr.sprite = s3;
         if(speed >= speedLimit) sr.sprite = s4;
-        Debug.Log(speed + ", " + speedLimit);
     }
 
     // Showing the progress bar
