@@ -37,13 +37,13 @@ public class Game : MonoBehaviour
     // Moving the camera right
     public void camShiftRight()
     {
-        cam.transform.Translate(new Vector3(42.0f, 0.0f, 0.0f));
+        cam.transform.Translate(new Vector3(42.3f, 0.0f, 0.0f));
     }
 
     // Moving the camera left
     public void camShiftLeft()
     {
-        cam.transform.Translate(new Vector3(-42.0f, 0.0f, 0.0f));
+        cam.transform.Translate(new Vector3(-42.3f, 0.0f, 0.0f));
     }
 
     // Ending the scene
