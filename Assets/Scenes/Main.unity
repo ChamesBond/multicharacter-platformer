@@ -1089,7 +1089,7 @@ GameObject:
   m_Component:
   - component: {fileID: 140897114}
   m_Layer: 0
-  m_Name: Zone2 (right)
+  m_Name: Zone3 (right)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1113,7 +1113,7 @@ Transform:
   - {fileID: 673083778}
   - {fileID: 236507600}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &141378591
 PrefabInstance:
@@ -4950,7 +4950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 686609688}
   m_Layer: 0
-  m_Name: Zone3 (down)
+  m_Name: Zone2 (down)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4973,7 +4973,7 @@ Transform:
   - {fileID: 2092907950}
   - {fileID: 1615496841}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &690392014
 PrefabInstance:
